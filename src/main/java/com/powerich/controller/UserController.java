@@ -1,5 +1,7 @@
 package com.powerich.controller;
 
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +19,13 @@ public class UserController {
 
 	@RequestMapping("/getUser")
 	public User getUser() {
-		User user = new User(-1,"Eric","深圳",23);
+		User user = new User(-1,"Eric","深圳",23,new Date());
 		return user;
 	}
 	
 	@RequestMapping("/save")
 	public String saveUser() {
-		User user = new User(-1,"Bob","Shenzhen",21);
+		User user = new User(-1,"Bob","Shenzhen",21,new Date());
 		userService.save(user);
 		return user.toString();
 	}

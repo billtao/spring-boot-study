@@ -20,10 +20,37 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- web支持: 1、web mvc; 2、restful; 3、jackjson支持; 4、aop ........ -->
     <dependency>
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <!-- servlet 依赖. -->  
+    <dependency>  
+        <groupId>javax.servlet</groupId>  
+        <artifactId>javax.servlet-api</artifactId>  
+        <scope>provided</scope>  
+    </dependency>  
+    <!--  
+        JSTL（JSP Standard Tag Library，JSP标准标签库)是一个不断完善的开放源代码的JSP标签库，是由apache的jakarta小组来维护的。JSTL只能运行在支持JSP1.2和Servlet2.3规范的容器上，如tomcat 4.x。在JSP 2.0中也是作为标准支持的。  
+        不然报异常信息：  
+        javax.servlet.ServletException: Circular view path [/helloJsp]: would dispatch back to the current handler URL [/helloJsp] again. Check your ViewResolver setup! (Hint: This may be the result of an unspecified view, due to default view name generation.)  
+     -->  
+    <dependency>  
+        <groupId>javax.servlet</groupId>  
+        <artifactId>jstl</artifactId>  
+    </dependency>  
+    <!-- tomcat 的支持.-->  
+    <dependency>  
+        <groupId>org.springframework.boot</groupId>  
+        <artifactId>spring-boot-starter-tomcat</artifactId>  
+        <scope>provided</scope>  
+    </dependency>  
+    <dependency>  
+        <groupId>org.apache.tomcat.embed</groupId>  
+        <artifactId>tomcat-embed-jasper</artifactId>  
+        <scope>provided</scope>  
+    </dependency> 
     <dependency>
     	<groupId>mysql</groupId>
     	<artifactId>mysql-connector-java</artifactId>
@@ -32,22 +59,66 @@
     	<groupId>org.springframework.boot</groupId>
     	<artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
+    <dependency>
+    	<groupId>com.alibaba</groupId>
+    	<artifactId>druid</artifactId>
+    	<version>1.0.18</version>
+    </dependency>
+    <!-- Spring Boot默认就是使用thymeleaf模板引擎  加入依赖-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-thymeleaf</artifactId>	
+	</dependency>
+	<!--  freemaker 模板依赖-->
+	<dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-freemarker</artifactId>
+	</dependency>
   </dependencies>
   <build>
       <plugins>  
       		<!-- 添加这个plugin 后，就可以直接运行main 方法运行系统，如通过右键==》 run as ==》maven build..==》 goals:spring-boot:run 运行则可不添加-->
             <plugin>  
-                <groupId>org.springframework.boot</groupId>  
-               <artifactId>spring-boot-maven-plugin </artifactId>  
-          </plugin> 
-          <!--  指定jdk 版本 为 1.8-->
-          <plugin>
-		   <artifactId>maven-compiler-plugin</artifactId>
-		   <configuration>
-		      <source>1.8</source>
-		      <target>1.8</target>
-		   </configuration>
-		</plugin> 
+	            <groupId>org.springframework.boot</groupId>  
+	            <artifactId>spring-boot-maven-plugin </artifactId>  
+	        </plugin> 
+	        <!--  指定jdk 版本 为 1.8-->
+	        <plugin>
+			   <artifactId>maven-compiler-plugin</artifactId>
+			   <configuration>
+			      <source>1.8</source>
+			      <target>1.8</target>
+			   </configuration>
+			</plugin>
+			<!-- 解决热部署的问题
+				如果是使用spring-boot:run的话，那么到此配置结束
+				如果使用的run as – java application的话，那么还需要做一些处理哦：
+				把spring-loader-1.2.4.RELEASE.jar下载下来，放到项目的lib目录中，然后把IDEA的run参数里VM参数设置为：
+				-javaagent:.\lib\springloaded-1.2.4.RELEASE.jar -noverify
+				然后启动就可以了，这样在run as的时候，也能进行热部署了。
+			 -->
+			<plugin>  
+                  <groupId>org.springframework.boot</groupId>  
+                  <artifactId>spring-boot-maven-plugin </artifactId>  
+                  <dependencies>   
+                    <!--springloaded  hot deploy -->   
+                    <dependency>   
+                        <groupId>org.springframework</groupId>   
+                        <artifactId>springloaded</artifactId>   
+                        <version>1.2.4.RELEASE</version>  
+                    </dependency>   
+                 </dependencies>   
+                 <executions>   
+                    <execution>   
+                        <goals>   
+                            <goal>repackage</goal>   
+                        </goals>   
+                        <configuration>   
+                            <classifier>exec</classifier>   
+                        </configuration>   
+                    </execution>   
+                  </executions>  
+			</plugin> 			 
        </plugins> 
     <finalName>springboot-test</finalName>
   </build>
